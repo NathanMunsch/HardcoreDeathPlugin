@@ -1,0 +1,4 @@
+name: HardcoreDeathPlugin
+version: '${project.version}'
+main: us.developers.hardcoredeathplugin.HardcoreDeathPlugin
+api-version: '1.20'

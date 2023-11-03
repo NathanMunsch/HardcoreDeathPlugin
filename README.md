@@ -1,13 +1,13 @@
 # HardcoreDeathPlugin
 
-Liste des quêtes à effectuer pour pouvoir respawn:
+List of quests to complete to be able to respawn:
 
-- Chasse aux trésors
-- Tuer un wither (give stuff + composants)
-- Faire un échange avec un PNJ
-- Craft une enclume
-- Pêcher 5 poissons
-- Tuer 10 zombies
-- Faire cuire 10 lingots d'or
-- Craft une pioche en diamant
+- Treasure hunt
+- Kill a wither (give stuff + components)
+- Make an exchange with an NPC
+- Craft an anvil
+- Catch 5 fish
+- Kill 10 zombies
+- Cook 10 gold bars
+- Craft a diamond pickaxe
 - ...

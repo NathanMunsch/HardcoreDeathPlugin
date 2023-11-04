@@ -16,4 +16,5 @@ List of quests to complete to be able to respawn:
 - Craft a painting
 - Ride a minecart
 - Craft an enchanting table
+- Mine an ancient debris
 - ...

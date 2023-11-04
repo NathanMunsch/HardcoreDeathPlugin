@@ -8,6 +8,12 @@ List of quests to complete to be able to respawn:
 - Craft an anvil
 - Catch 5 fish
 - Kill 10 zombies
-- Cook 10 gold bars
+- Melt 10 gold bars
 - Craft a diamond pickaxe
+- Activate a nether portal
+- Get a full iron armor stuff
+- Breed two cows
+- Craft a painting
+- Ride a minecart
+- Craft an enchanting table
 - ...

@@ -14,7 +14,8 @@ public class Database {
             CREATE TABLE IF NOT EXISTS players (
             uuid TEXT PRIMARY KEY,
             username TEXT NOT NULL,
-            repayMode INTEGER NOT NULL)
+            repayMode INTEGER NOT NULL,
+            deathsNumber INTEGRER NOT NULL DEFAULT 0)
             """);
         statement.execute("""
             CREATE TABLE IF NOT EXISTS quests (
@@ -32,37 +33,73 @@ public class Database {
             """);
     }
 
-    public void closeConnection() throws SQLException {
-        if (connection != null && !connection.isClosed()) {
-            connection.close();
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void addPlayer(Player player) throws SQLException {
+    public void addPlayer(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO players(uuid, username, repayMode) VALUES (?, ?, ?)")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
             preparedStatement.setString(2, player.getDisplayName());
             preparedStatement.setInt(3, 1);
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public boolean isInRepayMode(Player player) throws SQLException {
+    public boolean isInRepayMode(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT repayMode FROM players WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
-            preparedStatement.executeQuery();
-            ResultSet resultSet = preparedStatement.getResultSet();
+            ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return resultSet.getInt("repayMode") == 1;
+                int repayMode = resultSet.getInt("repayMode");
+                resultSet.close();
+                return repayMode == 1;
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return false;
     }
 
-    public void deactivateRepayMode(Player player) throws SQLException {
+    public void deactivateRepayMode(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = 0 WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
             preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public int getNumberOfDeath(Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deathsNumber FROM players WHERE uuid = ?")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int deathNumber = resultSet.getInt("deathNumber");
+                resultSet.close();
+                return deathNumber;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    public void addDeath(Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET deathsNumber = ? WHERE uuid = ?")) {
+            preparedStatement.setInt(1, getNumberOfDeath(player) + 1);
+            preparedStatement.setString(2, player.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 }

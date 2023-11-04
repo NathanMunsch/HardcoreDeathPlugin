@@ -15,7 +15,7 @@ public class Database {
             uuid TEXT PRIMARY KEY,
             username TEXT NOT NULL,
             repayMode INTEGER NOT NULL,
-            deathsNumber INTEGRER NOT NULL DEFAULT 0)
+            deaths INTEGRER NOT NULL DEFAULT 0)
             """);
         statement.execute("""
             CREATE TABLE IF NOT EXISTS quests (
@@ -78,8 +78,8 @@ public class Database {
         }
     }
 
-    public int getNumberOfDeath(Player player) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deathsNumber FROM players WHERE uuid = ?")) {
+    public int getDeaths(Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deaths FROM players WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -94,8 +94,8 @@ public class Database {
     }
 
     public void addDeath(Player player) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET deathsNumber = ? WHERE uuid = ?")) {
-            preparedStatement.setInt(1, getNumberOfDeath(player) + 1);
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET deaths = ? WHERE uuid = ?")) {
+            preparedStatement.setInt(1, getDeaths(player) + 1);
             preparedStatement.setString(2, player.getUniqueId().toString());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {

@@ -2,6 +2,7 @@ package us.developers.hardcoredeathplugin.database;
 
 import org.bukkit.entity.Player;
 import java.sql.*;
+import java.util.Random;
 
 public class Database {
     private final Connection connection;
@@ -119,6 +120,15 @@ public class Database {
         return false;
     }
 
+    public void activateRepayMode(Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = 1 WHERE uuid = ?")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void deactivateRepayMode(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = 0 WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
@@ -147,6 +157,43 @@ public class Database {
         try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET deaths = ? WHERE uuid = ?")) {
             preparedStatement.setInt(1, getDeaths(player) + 1);
             preparedStatement.setString(2, player.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void linkRandomQuests(Player player) {
+        int count = 0;
+        int[] randomNumbers;
+        do {
+            Random random = new Random();
+            randomNumbers = new int[5];
+            for (int i = 0; i < 5; i++) {
+                int min = 1;
+                int max = getLastIdFromQuestsTable();
+                randomNumbers[i] = random.nextInt(max - min + 1) + min;
+            }
+            count = 0;
+            for (int i = 0; i < randomNumbers.length; i++) {
+                for (int j = 0; j < randomNumbers.length; j++) {
+                    if (randomNumbers[i] == randomNumbers[j]) {
+                        count++;
+                    }
+                }
+            }
+        } while (count > 5);
+
+        for (int i = 0; i < randomNumbers.length; i++) {
+            linkQuest(randomNumbers[i], player);
+        }
+    }
+
+    private void linkQuest(int questId, Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
+                "players_quests(player_uuid, quests_id) VALUES (?, ?)")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.setInt(2, questId);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

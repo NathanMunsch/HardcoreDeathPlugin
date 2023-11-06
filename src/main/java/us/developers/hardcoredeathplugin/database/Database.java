@@ -14,7 +14,7 @@ public class Database {
     }
 
     private void createTables() {
-        Statement statement = null;
+        Statement statement;
         try {
             statement = connection.createStatement();
             statement.execute("""
@@ -59,12 +59,12 @@ public class Database {
                 {"Mine an ancient debris", "1"}
         };
 
-        for (int i = 0; i < quests.length; i++) {
+        for (String[] quest : quests) {
             try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT OR IGNORE INTO " +
                     "quests(id, name, objective) VALUES (?, ?, ?)")) {
                 preparedStatement.setInt(1, getLastIdFromQuestsTable() + 1);
-                preparedStatement.setString(2, quests[i][0]);
-                preparedStatement.setInt(3, Integer.parseInt(quests[i][1]));
+                preparedStatement.setString(2, quest[0]);
+                preparedStatement.setInt(3, Integer.parseInt(quest[1]));
                 preparedStatement.executeUpdate();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
@@ -164,7 +164,7 @@ public class Database {
     }
 
     public void linkRandomQuests(Player player) {
-        int count = 0;
+        int count;
         int[] randomNumbers;
         do {
             Random random = new Random();
@@ -175,17 +175,17 @@ public class Database {
                 randomNumbers[i] = random.nextInt(max - min + 1) + min;
             }
             count = 0;
-            for (int i = 0; i < randomNumbers.length; i++) {
-                for (int j = 0; j < randomNumbers.length; j++) {
-                    if (randomNumbers[i] == randomNumbers[j]) {
+            for (int number : randomNumbers) {
+                for (int randomNumber : randomNumbers) {
+                    if (number == randomNumber) {
                         count++;
                     }
                 }
             }
         } while (count > 5);
 
-        for (int i = 0; i < randomNumbers.length; i++) {
-            linkQuest(randomNumbers[i], player);
+        for (int randomNumber : randomNumbers) {
+            linkQuest(randomNumber, player);
         }
     }
 

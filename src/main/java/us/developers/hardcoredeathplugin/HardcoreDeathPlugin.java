@@ -27,16 +27,20 @@ public final class HardcoreDeathPlugin extends JavaPlugin implements Listener {
             }
 
             try {
-                db = new Database( getDataFolder().getAbsolutePath() + "/HardcoreDeathPlugin.db");
+                db = new Database(getDataFolder().getAbsolutePath() + "/HardcoreDeathPlugin.db");
             } catch (SQLException e) {
                 getLogger().log(Level.SEVERE, "(Plugin disabled) Failed to connect to the " +
                         "database : " + e.getMessage());
                 Bukkit.getPluginManager().disablePlugin(this);
             }
 
+            //Register events
             getServer().getPluginManager().registerEvents(new DeactivateInteracting(), this);
             getServer().getPluginManager().registerEvents(new OnConnectionEvent(), this);
             getServer().getPluginManager().registerEvents(new PlayerPickedUpItem(), this);
+
+            //Register commands
+
 
             getLogger().log(Level.INFO, "The plugin has correctly started");
         }

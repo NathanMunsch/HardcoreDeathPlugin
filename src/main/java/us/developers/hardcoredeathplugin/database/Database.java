@@ -2,6 +2,7 @@ package us.developers.hardcoredeathplugin.database;
 
 import org.bukkit.entity.Player;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Database {
@@ -11,6 +12,16 @@ public class Database {
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
         createTables();
         initializeQuests();
+    }
+
+    public void closeConnection() {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void createTables() {
@@ -33,6 +44,7 @@ public class Database {
                 CREATE TABLE IF NOT EXISTS players_quests (
                 player_uuid TEXT,
                 quests_id INTEGER,
+                progression INTEGER DEFAULT 0,
                 PRIMARY KEY (player_uuid, quests_id),
                 FOREIGN KEY (player_uuid) REFERENCES players(uuid),
                 FOREIGN KEY (quests_id) REFERENCES quests(id))
@@ -72,30 +84,6 @@ public class Database {
         }
     }
 
-    private int getLastIdFromQuestsTable() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT MAX(id) AS 'lastId' FROM quests")) {
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                int lastId = resultSet.getInt("lastId");
-                resultSet.close();
-                return lastId;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 0;
-    }
-
-    public void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public void addPlayer(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT OR IGNORE INTO players(uuid) VALUES (?)")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
@@ -105,7 +93,17 @@ public class Database {
         }
     }
 
-    public boolean isInRepayMode(Player player) {
+    public void setRepayMode(Player player, int value) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = ? WHERE uuid = ?")) {
+            preparedStatement.setInt(1, value);
+            preparedStatement.setString(2, player.getUniqueId().toString());
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean getRepayMode(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT repayMode FROM players WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -120,30 +118,12 @@ public class Database {
         return false;
     }
 
-    public void activateRepayMode(Player player) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = 1 WHERE uuid = ?")) {
-            preparedStatement.setString(1, player.getUniqueId().toString());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void deactivateRepayMode(Player player) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players SET repayMode = 0 WHERE uuid = ?")) {
-            preparedStatement.setString(1, player.getUniqueId().toString());
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public int getDeaths(Player player) {
         try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT deaths FROM players WHERE uuid = ?")) {
             preparedStatement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int deathNumber = resultSet.getInt("deathNumber");
+                int deathNumber = resultSet.getInt("deaths");
                 resultSet.close();
                 return deathNumber;
             }
@@ -163,13 +143,129 @@ public class Database {
         }
     }
 
+    private int getLastIdFromQuestsTable() {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT MAX(id) AS 'lastId' FROM quests")) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int lastId = resultSet.getInt("lastId");
+                resultSet.close();
+                return lastId;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    public String getQuestName(int questId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT name FROM quests WHERE id = ?")) {
+            preparedStatement.setInt(1, questId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                String objective = resultSet.getString("deathNumber");
+                resultSet.close();
+                return objective;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return "";
+    }
+
+    public int getQuestObjective(int questId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT objective FROM quests WHERE id = ?")) {
+            preparedStatement.setInt(1, questId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int objective = resultSet.getInt("deathNumber");
+                resultSet.close();
+                return objective;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    private void addQuestToPlayer(int questId, Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
+                "players_quests(player_uuid, quests_id) VALUES (?, ?)")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            preparedStatement.setInt(2, questId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Integer> getPlayerQuests(Player player) {
+        ArrayList<Integer> quests = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT quests_id " +
+                "FROM players_quests WHERE player_uuid = ?")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                quests.add(resultSet.getInt("nb"));
+                resultSet.close();
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return quests;
+    }
+
+    private int getNumberOfQuests(Player player) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT COUNT(quests_id) " +
+                "AS 'nb' FROM players_quests WHERE player_uuid = ?")) {
+            preparedStatement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int nb = resultSet.getInt("nb");
+                resultSet.close();
+                return nb;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    public int getProgression(Player pLayer, int questId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT progression FROM " +
+                "players_quests WHERE player_uuid = ? AND quests_id = ?")) {
+            preparedStatement.setString(1, pLayer.getUniqueId().toString());
+            preparedStatement.setInt(2, questId);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                int progression = resultSet.getInt("progression");
+                resultSet.close();
+                return progression;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
+
+    public void addProgression(Player player, int questId) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_quests " +
+                "SET progression = ? WHERE player_uuid = ? AND quests_id")) {
+            preparedStatement.setInt(1, getProgression(player, questId) + 1);
+            preparedStatement.setString(2, player.getUniqueId().toString());
+            preparedStatement.setInt(2, questId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void linkRandomQuests(Player player) {
         int count;
-        int[] randomNumbers;
+        int nbOfQuestToLink = 5 - getNumberOfQuests(player);
+        int[] randomNumbers = new int[nbOfQuestToLink];
+        Random random = new Random();
         do {
-            Random random = new Random();
-            randomNumbers = new int[5];
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < randomNumbers.length; i++) {
                 int min = 1;
                 int max = getLastIdFromQuestsTable();
                 randomNumbers[i] = random.nextInt(max - min + 1) + min;
@@ -185,18 +281,7 @@ public class Database {
         } while (count > 5);
 
         for (int randomNumber : randomNumbers) {
-            linkQuest(randomNumber, player);
-        }
-    }
-
-    private void linkQuest(int questId, Player player) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " +
-                "players_quests(player_uuid, quests_id) VALUES (?, ?)")) {
-            preparedStatement.setString(1, player.getUniqueId().toString());
-            preparedStatement.setInt(2, questId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+            addQuestToPlayer(randomNumber, player);
         }
     }
 }

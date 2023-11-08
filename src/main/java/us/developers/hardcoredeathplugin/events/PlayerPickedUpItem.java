@@ -8,7 +8,7 @@ import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 public class PlayerPickedUpItem implements Listener {
     @EventHandler
     public void playerPickedUpItem(PlayerPickupItemEvent playerPickupItemEvent) {
-        if (HardcoreDeathPlugin.db.isInRepayMode(playerPickupItemEvent.getPlayer())) {
+        if (HardcoreDeathPlugin.db.getRepayMode(playerPickupItemEvent.getPlayer())) {
             playerPickupItemEvent.setCancelled(true);
         }
     }

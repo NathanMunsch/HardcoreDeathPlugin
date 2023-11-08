@@ -8,7 +8,7 @@ import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 public class DeactivateInteracting implements Listener {
     @EventHandler
     public void whenInteracting(PlayerInteractEvent playerInteractEvent) {
-        if (HardcoreDeathPlugin.db.isInRepayMode(playerInteractEvent.getPlayer())) {
+        if (HardcoreDeathPlugin.db.getRepayMode(playerInteractEvent.getPlayer())) {
             playerInteractEvent.setCancelled(true);
         }
     }

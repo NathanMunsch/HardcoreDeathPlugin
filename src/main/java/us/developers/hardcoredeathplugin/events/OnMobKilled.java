@@ -8,7 +8,7 @@ import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 public class OnMobKilled implements Listener {
     @EventHandler
     public void playerKilledMob(EntityDeathEvent entityDeathEvent) {
-        if (HardcoreDeathPlugin.db.isInRepayMode(entityDeathEvent.getEntity().getKiller())) {
+        if (HardcoreDeathPlugin.db.getRepayMode(entityDeathEvent.getEntity().getKiller())) {
             if (entityDeathEvent.getEntity().getName().equals("Zombie")) {
                 // fonction en bdd
             }

@@ -2,10 +2,14 @@ package us.developers.hardcoredeathplugin;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameRule;
+import us.developers.hardcoredeathplugin.commands.Abandon;
 import us.developers.hardcoredeathplugin.database.Database;
 import us.developers.hardcoredeathplugin.events.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
+import us.developers.hardcoredeathplugin.events.quests.OnFishCaught;
+import us.developers.hardcoredeathplugin.events.quests.OnMinedBlock;
+import us.developers.hardcoredeathplugin.events.quests.OnMobKilled;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -36,11 +40,15 @@ public final class HardcoreDeathPlugin extends JavaPlugin implements Listener {
 
             //Register events
             getServer().getPluginManager().registerEvents(new DeactivateInteracting(), this);
-            getServer().getPluginManager().registerEvents(new OnConnectionEvent(), this);
+            getServer().getPluginManager().registerEvents(new OnFishCaught(), this);
+            getServer().getPluginManager().registerEvents(new OnMinedBlock(), this);
+            getServer().getPluginManager().registerEvents(new OnMobKilled(), this);
+            getServer().getPluginManager().registerEvents(new OnPlayerConnection(), this);
+            getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
             getServer().getPluginManager().registerEvents(new PlayerPickedUpItem(), this);
 
             //Register commands
-
+            getCommand("abandon").setExecutor(new Abandon());
 
             getLogger().log(Level.INFO, "The plugin has correctly started");
         }

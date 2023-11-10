@@ -44,8 +44,8 @@ public final class HardcoreDeathPlugin extends JavaPlugin implements Listener {
             getServer().getPluginManager().registerEvents(new OnMinedBlock(), this);
             getServer().getPluginManager().registerEvents(new OnMobKilled(), this);
             getServer().getPluginManager().registerEvents(new OnPlayerConnection(), this);
-            getServer().getPluginManager().registerEvents(new PlayerDeath(), this);
-            getServer().getPluginManager().registerEvents(new PlayerPickedUpItem(), this);
+            getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
+            getServer().getPluginManager().registerEvents(new DeactivatePickingUpItem(), this);
 
             //Register commands
             getCommand("abandon").setExecutor(new Abandon());

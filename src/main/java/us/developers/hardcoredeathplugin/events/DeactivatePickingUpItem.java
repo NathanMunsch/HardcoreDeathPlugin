@@ -5,7 +5,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 
-public class PlayerPickedUpItem implements Listener {
+public class DeactivatePickingUpItem implements Listener {
     @EventHandler
     public void playerPickedUpItem(PlayerPickupItemEvent playerPickupItemEvent) {
         if (HardcoreDeathPlugin.db.getRepayMode(playerPickupItemEvent.getPlayer())) {

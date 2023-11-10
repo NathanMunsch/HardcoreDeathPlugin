@@ -1,4 +1,4 @@
-package us.developers.hardcoredeathplugin.events;
+package us.developers.hardcoredeathplugin.events.quests;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -8,10 +8,12 @@ import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 public class OnFishCaught implements Listener {
 
     @EventHandler
-    public void playerCatchedFish(PlayerFishEvent playerFishEvent) {
-        if (HardcoreDeathPlugin.db.isInRepayMode(playerFishEvent.getPlayer())) {
+    public void playerCaughtFish(PlayerFishEvent playerFishEvent) {
+        if (HardcoreDeathPlugin.db.getRepayMode(playerFishEvent.getPlayer())) {
+
+            // Quest catch 5 fishes
             if (playerFishEvent.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-                // fonction a appeler en bdd
+                HardcoreDeathPlugin.db.addProgression(playerFishEvent.getPlayer(), 4);
             }
         }
     }

@@ -2,3 +2,8 @@ name: HardcoreDeathPlugin
 version: '${project.version}'
 main: us.developers.hardcoredeathplugin.HardcoreDeathPlugin
 api-version: '1.20'
+
+commands:
+  abandon:
+    description: Give up the quests and die forever
+    usage: /abandon

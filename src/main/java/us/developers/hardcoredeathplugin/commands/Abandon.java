@@ -24,7 +24,7 @@ public class Abandon implements CommandExecutor {
                             player.setHealth(0);
                         }
                     }
-                }.runTaskLater(HardcoreDeathPlugin.getPlugin(HardcoreDeathPlugin.class), 600);
+                }.runTaskLater(HardcoreDeathPlugin.getPlugin(HardcoreDeathPlugin.class), 600); //600 ticks = 30 seconds
             }
         }
         return true;

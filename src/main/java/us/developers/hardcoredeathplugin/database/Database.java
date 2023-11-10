@@ -248,14 +248,18 @@ public class Database {
     }
 
     public void addProgression(Player player, int questId) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_quests " +
-                "SET progression = ? WHERE player_uuid = ? AND quests_id")) {
-            preparedStatement.setInt(1, getProgression(player, questId) + 1);
-            preparedStatement.setString(2, player.getUniqueId().toString());
-            preparedStatement.setInt(2, questId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (getPlayerQuests(player).contains(questId)) {
+            if (getProgression(player, questId) < getQuestObjective(questId)) {
+                try (PreparedStatement preparedStatement = connection.prepareStatement("UPDATE players_quests " +
+                        "SET progression = ? WHERE player_uuid = ? AND quests_id")) {
+                    preparedStatement.setInt(1, getProgression(player, questId) + 1);
+                    preparedStatement.setString(2, player.getUniqueId().toString());
+                    preparedStatement.setInt(2, questId);
+                    preparedStatement.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
     }
 

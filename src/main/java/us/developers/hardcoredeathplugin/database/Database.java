@@ -56,19 +56,14 @@ public class Database {
 
     private void initializeQuests() {
         String[][] quests = new String[][] {
-                {"Treasure hunt", "1"},
-                {"Kill a wither", "1"},
-                {"Make an exchange with an NPC", "1"},
-                {"Craft an anvil", "1"},
-                {"Catch 5 fish", "5"},
-                {"Kill 10 zombies", "10"},
-                {"Melt 10 gold bars", "10"},
-                {"Craft a diamond pickaxe", "1"},
-                {"Activate a nether portal", "1"},
-                {"Breed two cows", "2"},
-                {"Ride a minecart", "1"},
-                {"Craft an enchanting table", "1"},
-                {"Mine an ancient debris", "1"}
+                {"Kill a wither", "1"}, // 1
+                {"Craft an anvil", "1"}, // 2
+                {"Catch 5 fish", "5"}, // 3
+                {"Kill 10 zombies", "10"}, // 4
+                {"Craft a diamond pickaxe", "1"}, // 5
+                {"Craft a painting", "1"}, // 6
+                {"Craft an enchanting table", "1"}, // 7
+                {"Mine an ancient debris", "1"} // 8
         };
 
         for (String[] quest : quests) {

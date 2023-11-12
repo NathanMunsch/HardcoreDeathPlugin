@@ -20,6 +20,6 @@ public class MessagesUtils {
 
     public static void abandonMessage(Player player) {
         player.sendMessage(ChatColor.YELLOW + "You will give up and lose your last chance to live.");
-        player.sendMessage(ChatColor.RED + "WARNING : To cancel this action, disconnect within 30 seconds for at least 1 minute.");
+        player.sendMessage(ChatColor.RED + "To cancel this action, disconnect within 30 seconds for at least 1 minute.");
     }
 }

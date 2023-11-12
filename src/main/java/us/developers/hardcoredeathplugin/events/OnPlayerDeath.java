@@ -20,12 +20,8 @@ public class OnPlayerDeath implements Listener {
         if (playerDeaths == 1) {
             HardcoreDeathPlugin.db.setRepayMode(player, 1);
             HardcoreDeathPlugin.db.linkRandomQuests(player);
-            Location respawnLocation = player.getBedSpawnLocation();
-            if (respawnLocation == null) {
-                respawnLocation = player.getWorld().getSpawnLocation();
-            }
-
             RespawnUtils.playerRespawn(player);
+
             player.sendMessage(ChatColor.YELLOW + "You are dead but you have one last chance to regain your life, complete the quests and you will live.");
             player.sendMessage(ChatColor.GREEN + "/quests : To know which quests to do.");
             player.sendMessage(ChatColor.GREEN + "/abandon : To give up and die forever.");

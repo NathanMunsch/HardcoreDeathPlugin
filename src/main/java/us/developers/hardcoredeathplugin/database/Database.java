@@ -162,9 +162,9 @@ public class Database {
             preparedStatement.setInt(1, questId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                String objective = resultSet.getString("deathNumber");
+                String name = resultSet.getString("name");
                 resultSet.close();
-                return objective;
+                return name;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -177,7 +177,7 @@ public class Database {
             preparedStatement.setInt(1, questId);
             ResultSet resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                int objective = resultSet.getInt("deathNumber");
+                int objective = resultSet.getInt("objective");
                 resultSet.close();
                 return objective;
             }
@@ -205,9 +205,9 @@ public class Database {
             preparedStatement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                quests.add(resultSet.getInt("nb"));
-                resultSet.close();
+                quests.add(resultSet.getInt("quests_id"));
             }
+            resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

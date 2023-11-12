@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
+import us.developers.hardcoredeathplugin.utils.RespawnUtils;
 
 public class OnPlayerDeath implements Listener {
     @EventHandler
@@ -24,10 +25,7 @@ public class OnPlayerDeath implements Listener {
                 respawnLocation = player.getWorld().getSpawnLocation();
             }
 
-            player.setHealth(20);
-            player.setFoodLevel(20);
-            player.setGameMode(GameMode.SURVIVAL);
-            player.teleport(respawnLocation);
+            RespawnUtils.playerRespawn(player);
             player.sendMessage(ChatColor.YELLOW + "You are dead but you have one last chance to regain your life, complete the quests and you will live.");
             player.sendMessage(ChatColor.GREEN + "/quests : To know which quests to do.");
             player.sendMessage(ChatColor.GREEN + "/abandon : To give up and die forever.");

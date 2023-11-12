@@ -1,12 +1,12 @@
 package us.developers.hardcoredeathplugin.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
+import us.developers.hardcoredeathplugin.utils.MessagesUtils;
 
 public class Abandon implements CommandExecutor {
     @Override
@@ -14,8 +14,8 @@ public class Abandon implements CommandExecutor {
         if (commandSender instanceof Player) {
             Player player = (Player) commandSender;
             if (HardcoreDeathPlugin.db.getRepayMode(player)) {
-                player.sendMessage(ChatColor.YELLOW + "You will give up and lose your last chance to live.");
-                player.sendMessage(ChatColor.RED + "WARNING : To cancel this action, disconnect within 30 seconds for at least 1 minute.");
+
+                MessagesUtils.abandonMessage(player);
 
                 new BukkitRunnable() {
                     @Override

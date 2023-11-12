@@ -1,6 +1,5 @@
 package us.developers.hardcoredeathplugin.events;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 import us.developers.hardcoredeathplugin.commands.Quests;
+import us.developers.hardcoredeathplugin.utils.MessagesUtils;
 import us.developers.hardcoredeathplugin.utils.RespawnUtils;
 
 public class OnInventoryClick implements Listener {
@@ -28,7 +28,7 @@ public class OnInventoryClick implements Listener {
                     if (questsSucceeded) {
                         HardcoreDeathPlugin.db.setRepayMode(player, 0);
                         RespawnUtils.playerRespawn(player);
-                        player.sendMessage(ChatColor.YELLOW + "Congratulation! You achieved all the quests, you have now another chance to live.");
+                        MessagesUtils.anotherLifeMessage(player);
                     }
                 }
             }

@@ -9,17 +9,19 @@ import us.developers.hardcoredeathplugin.HardcoreDeathPlugin;
 public class OnMobKilled implements Listener {
     @EventHandler
     public void playerKilledMob(EntityDeathEvent entityDeathEvent) {
-        Player player = entityDeathEvent.getEntity().getKiller();
-        if (HardcoreDeathPlugin.db.getRepayMode(player)) {
+        if (entityDeathEvent.getEntity().getKiller() != null) {
+            Player player = entityDeathEvent.getEntity().getKiller();
+            if (HardcoreDeathPlugin.db.getRepayMode(player)) {
 
-            //Quest kill a wither
-            if (entityDeathEvent.getEntity().getName().toLowerCase().contains("wither")) {
-                HardcoreDeathPlugin.db.addProgression(player, 1);
-            }
+                //Quest kill a wither
+                if (entityDeathEvent.getEntity().getName().toLowerCase().contains("wither")) {
+                    HardcoreDeathPlugin.db.addProgression(player, 1);
+                }
 
-            //Quest kill a zombie
-            if (entityDeathEvent.getEntity().getName().toLowerCase().contains("zombie")) {
-                HardcoreDeathPlugin.db.addProgression(player, 5);
+                //Quest kill a zombie
+                if (entityDeathEvent.getEntity().getName().toLowerCase().contains("zombie")) {
+                    HardcoreDeathPlugin.db.addProgression(player, 4);
+                }
             }
         }
     }

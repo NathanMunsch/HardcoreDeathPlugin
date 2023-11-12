@@ -30,7 +30,7 @@ public class OnPlayerDeath implements Listener {
             player.teleport(respawnLocation);
             player.sendMessage(ChatColor.YELLOW + "You are dead but you have one last chance to regain your life, complete the quests and you will live.");
             player.sendMessage(ChatColor.GREEN + "/quests : To know which quests to do.");
-            player.sendMessage(ChatColor.RED + "/abandon : To give up and die forever.");
+            player.sendMessage(ChatColor.GREEN + "/abandon : To give up and die forever.");
         }
 
         if (playerDeaths >= 2) {

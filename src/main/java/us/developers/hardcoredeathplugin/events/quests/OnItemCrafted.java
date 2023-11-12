@@ -16,22 +16,22 @@ public class OnItemCrafted implements Listener {
 
                 // Quest craft an anvil
                 if (craftItemEvent.getRecipe().getResult().getType() == Material.ANVIL) {
-                    HardcoreDeathPlugin.db.addProgression(player, 3);
+                    HardcoreDeathPlugin.db.addProgression(player, 2);
                 }
 
                 // Quest craft a diamond pickaxe
                 if (craftItemEvent.getRecipe().getResult().getType() == Material.DIAMOND_PICKAXE) {
-                    HardcoreDeathPlugin.db.addProgression(player, 7);
+                    HardcoreDeathPlugin.db.addProgression(player, 5);
                 }
 
                 // Quest craft a painting
                 if (craftItemEvent.getRecipe().getResult().getType() == Material.PAINTING) {
-                    HardcoreDeathPlugin.db.addProgression(player, 11);
+                    HardcoreDeathPlugin.db.addProgression(player, 6);
                 }
 
                 // Quest craft a enchanting table
                 if (craftItemEvent.getRecipe().getResult().getType() == Material.ENCHANTING_TABLE) {
-                    HardcoreDeathPlugin.db.addProgression(player, 13);
+                    HardcoreDeathPlugin.db.addProgression(player, 7);
                 }
             }
         }

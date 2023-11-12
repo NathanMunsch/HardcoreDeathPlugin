@@ -15,7 +15,7 @@ public class OnMinedBlock implements Listener {
 
             // Quest mine an ancien debris
             if (blockBreakEvent.getBlock().getType() == Material.ANCIENT_DEBRIS) {
-                HardcoreDeathPlugin.db.addProgression(player, 14);
+                HardcoreDeathPlugin.db.addProgression(player, 8);
             }
         }
     }

@@ -13,7 +13,7 @@ public class OnFishCaught implements Listener {
 
             // Quest catch 5 fishes
             if (playerFishEvent.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
-                HardcoreDeathPlugin.db.addProgression(playerFishEvent.getPlayer(), 4);
+                HardcoreDeathPlugin.db.addProgression(playerFishEvent.getPlayer(), 3);
             }
         }
     }

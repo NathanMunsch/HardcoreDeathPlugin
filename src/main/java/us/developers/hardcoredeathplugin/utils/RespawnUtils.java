@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 
 public class RespawnUtils {
     public static void playerRespawn(Player player) {
-        player.teleport(getPlayerSpawnPoint(player));
+        player.setGameMode(GameMode.SURVIVAL);
         player.setHealth(20);
         player.setFoodLevel(20);
-        player.setGameMode(GameMode.SURVIVAL);
+        player.teleport(getPlayerSpawnPoint(player));
         player.getInventory().clear();
     }
 

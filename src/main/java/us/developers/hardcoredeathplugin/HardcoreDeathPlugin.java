@@ -8,10 +8,7 @@ import us.developers.hardcoredeathplugin.database.Database;
 import us.developers.hardcoredeathplugin.events.*;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import us.developers.hardcoredeathplugin.events.quests.OnFishCaught;
-import us.developers.hardcoredeathplugin.events.quests.OnItemCrafted;
-import us.developers.hardcoredeathplugin.events.quests.OnMinedBlock;
-import us.developers.hardcoredeathplugin.events.quests.OnMobKilled;
+import us.developers.hardcoredeathplugin.events.quests.*;
 
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -48,6 +45,7 @@ public final class HardcoreDeathPlugin extends JavaPlugin implements Listener {
             getServer().getPluginManager().registerEvents(new OnPlayerDeath(), this);
 
             //Register quests events
+            getServer().getPluginManager().registerEvents(new OnBreed(), this);
             getServer().getPluginManager().registerEvents(new OnFishCaught(), this);
             getServer().getPluginManager().registerEvents(new OnItemCrafted(), this);
             getServer().getPluginManager().registerEvents(new OnMinedBlock(), this);

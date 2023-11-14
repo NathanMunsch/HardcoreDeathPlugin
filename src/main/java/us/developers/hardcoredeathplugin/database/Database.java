@@ -63,7 +63,8 @@ public class Database {
                 {"Craft a diamond pickaxe", "1"}, // 5
                 {"Craft a painting", "1"}, // 6
                 {"Craft an enchanting table", "1"}, // 7
-                {"Mine an ancient debris", "1"} // 8
+                {"Mine an ancient debris", "1"}, // 8
+                {"Breed two cows", "1"} // 9
         };
 
         for (String[] quest : quests) {
